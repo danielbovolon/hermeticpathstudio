@@ -76,16 +76,20 @@ button{font:inherit;color:inherit}
   .langsw{margin-left:auto}
 }
 
-/* Hero */
-.hero{padding-block:64px 40px;display:grid;gap:28px}
+/* Hero (sempre scuro, con video di sfondo) */
+.hero{position:relative;overflow:hidden;background:#101216;color:#e8e3d8;min-height:min(86vh,820px);display:flex;align-items:flex-end}
+.hero-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,18,22,.55) 0%,rgba(16,18,22,.15) 40%,rgba(16,18,22,.85) 100%),linear-gradient(90deg,rgba(16,18,22,.75) 0%,rgba(16,18,22,0) 65%)}
+.hero-inner{position:relative;width:100%;padding-block:96px 56px;display:grid;gap:26px}
+.hero .label{color:#b6bbc2}
 .hero h1{font-size:clamp(3rem,10vw,7.5rem);font-weight:800;text-transform:uppercase;letter-spacing:-.01em}
-.hero h1 span{display:block;color:var(--muted);font-weight:500}
+.hero h1 span{display:block;color:#a9aeb5;font-weight:500}
 .hero .lede{max-width:60ch;font-size:1.2rem}
 .cta{display:flex;gap:10px;flex-wrap:wrap}
-.btn{font-family:var(--f-label);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:.9rem;text-decoration:none;padding:10px 18px;border-radius:3px;border:1px solid var(--line);background:var(--panel)}
-.btn:hover{border-color:var(--fg)}
-.btn.primary{background:var(--cap-amber);border-color:var(--cap-amber);color:#14171b}
-.wave{display:block;width:100%;height:110px}
+.btn{font-family:var(--f-label);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:.9rem;text-decoration:none;padding:10px 18px;border-radius:3px;border:1px solid rgba(232,227,216,.35);background:rgba(16,18,22,.5);color:#e8e3d8}
+.btn:hover{border-color:#e8e3d8}
+.btn.primary{background:#e2a53c;border-color:#e2a53c;color:#14171b}
+@media (prefers-reduced-motion: reduce){.hero-media{display:none}.hero{background:#101216 url(media/hero-poster.jpg) center/cover}}
 
 section{padding-block:56px;border-top:1px solid var(--line)}
 .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:28px;flex-wrap:wrap}
@@ -94,14 +98,18 @@ section{padding-block:56px;border-top:1px solid var(--line)}
 
 /* Tracce (chi siamo) */
 .tracks{display:grid;gap:12px}
-.track{display:grid;grid-template-columns:140px 1fr;border:1px solid var(--line);background:var(--panel);border-radius:4px;overflow:hidden}
+.track{display:grid;grid-template-columns:190px 1fr;border:1px solid var(--line);background:var(--panel);border-radius:4px;overflow:hidden}
 .track-hdr{background:var(--panel-2);border-right:1px solid var(--line);padding:16px;display:flex;flex-direction:column;gap:10px}
 .track-hdr .name{font-family:var(--f-display);font-weight:700;font-size:1.6rem;text-transform:uppercase;line-height:1}
-.track-body{padding:18px 20px;display:grid;gap:12px;min-width:0}
+.track-body{padding:18px 20px;display:grid;gap:12px;min-width:0;align-content:start}
 .track-body ul{margin:0;padding-left:1.1em;display:grid;gap:4px}
+.portrait{aspect-ratio:4/5;border-radius:3px;overflow:hidden;background:var(--bg);border:1px solid var(--line)}
+.portrait img{width:100%;height:100%;object-fit:cover;filter:grayscale(.15)}
+.portrait.ph{display:grid;place-items:center;align-content:center;gap:6px;background:repeating-linear-gradient(135deg,transparent 0 10px,var(--panel) 10px 20px)}
+.portrait .ini{font-family:var(--f-display);font-weight:800;font-size:2.6rem;color:var(--muted);line-height:1}
 .track.t1 .track-hdr{border-left:6px solid var(--cap-blue)}
 .track.t2 .track-hdr{border-left:6px solid var(--cap-green)}
-@media (max-width:640px){.track{grid-template-columns:1fr}.track-hdr{border-right:0;border-bottom:1px solid var(--line)}}
+@media (max-width:640px){.track{grid-template-columns:1fr}.track-hdr{border-right:0;border-bottom:1px solid var(--line);flex-direction:row;align-items:center;gap:16px}.portrait{width:96px;flex:none}.portrait .ini{font-size:1.8rem}.portrait.ph .label{display:none}}
 
 /* Channel strip (servizi) */
 .console{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--panel)}
@@ -241,7 +249,13 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 </header>
 
 <main id="top">
-  <div class="wrap hero">
+  <div class="hero">
+    <video class="hero-media" id="herovid" autoplay muted loop playsinline preload="auto" poster="media/hero-poster.jpg" aria-hidden="true">
+      <!-- Showreel: sostituisci media/hero.mp4 (e media/hero-poster.jpg) con il vostro video -->
+      <source src="media/hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero-shade"></div>
+    <div class="wrap hero-inner">
     <p class="label" data-i18n="hero.kicker">Studio di registrazione e post-produzione · Bolzano</p>
     <h1>Hermetic Path <span>Sound Studio</span></h1>
     <p class="lede" data-i18n="hero.lede">Post-produzione audio per film, ADR, voci, musica originale e sound design. Lavoriamo nel centro storico di Bolzano, in italiano, tedesco e inglese.</p>
@@ -249,7 +263,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
       <a class="btn primary" href="#contatti" data-i18n="hero.cta1">Richiedi un preventivo</a>
       <a class="btn" href="#speaker" data-i18n="hero.cta2">Ascolta gli speaker</a>
     </div>
-    <canvas id="wf" class="wave" aria-hidden="true"></canvas>
+    
+  </div>
   </div>
 
   <section id="chi-siamo">
@@ -258,7 +273,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
       <p class="intro" data-i18n="about.intro">Hermetic Path nasce dall'unione dell'Atelier Neun di Aaron Giaier con il lavoro di Daniel Bovolon. Siamo due tecnici del suono formati a Berlino, con oltre vent'anni di esperienza complessiva, tornati in Alto Adige per aprire uno studio professionale al servizio delle produzioni locali e internazionali.</p>
       <div class="tracks">
         <article class="track t1">
-          <div class="track-hdr"><span class="name">Daniel<br>Bovolon</span></div>
+          <div class="track-hdr"><div class="portrait"><img src="img/daniel.jpg" alt="Daniel Bovolon" width="369" height="461" loading="lazy"></div><span class="name">Daniel<br>Bovolon</span></div>
           <div class="track-body">
             <p class="label">Tonmeister · Sound designer · Field recordist</p>
             <ul>
@@ -270,7 +285,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
           </div>
         </article>
         <article class="track t2">
-          <div class="track-hdr"><span class="name">Aaron<br>Giaier</span></div>
+          <div class="track-hdr"><div class="portrait ph"><!-- Foto di Aaron: metti img/aaron.jpg e sostituisci questo blocco con <img src="img/aaron.jpg" alt="Aaron Giaier"> --><span class="ini">AG</span><span class="label" data-i18n="ph.photo">Foto in arrivo</span></div><span class="name">Aaron<br>Giaier</span></div>
           <div class="track-body">
             <p class="label" data-i18n="aaron.role">Post-produzione film · ADR · Doppiaggio</p>
             <ul>
@@ -458,7 +473,7 @@ var T = {
     "daniel.2":"Originalton, Postproduktion, Sounddesign und Mischung für Film, Serien, Werbung und Produktionen jeden Formats.",
     "daniel.3":"Musikproduktion.",
     "daniel.4":"Ton-, Licht- und Bühnentechniker für Events und Festivals, darunter das Transart Festival.",
-    "aaron.role":"Filmpostproduktion · ADR · Synchron",
+    "aaron.role":"Filmpostproduktion · ADR · Synchron","ph.photo":"Foto folgt",
     "aaron.1":"Ausbildung in Berlin.",
     "aaron.2":"10 Jahre Erfahrung in Berliner Synchron- und Postproduktionsstudios, darunter Oxygen Sound und K13.",
     "aaron.3":"Dialogschnitt für über 100 Anime-Serien und zahlreiche Filme.",
@@ -504,7 +519,7 @@ var T = {
     "daniel.2":"Location sound, post-production, sound design and mixing for film, series, advertising and productions of every format.",
     "daniel.3":"Music production.",
     "daniel.4":"Sound, lighting and stage technician for events and festivals, including Transart Festival.",
-    "aaron.role":"Film post-production · ADR · Dubbing",
+    "aaron.role":"Film post-production · ADR · Dubbing","ph.photo":"Photo coming soon",
     "aaron.1":"Trained in Berlin.",
     "aaron.2":"10 years in Berlin dubbing and post-production studios, including Oxygen Sound and K13.",
     "aaron.3":"Dialogue editing on more than 100 anime series and numerous films.",
@@ -668,28 +683,6 @@ document.querySelectorAll("[data-setlang]").forEach(function(b){ b.addEventListe
   setLang(["it","de","en"].indexOf(l) !== -1 ? l : "it");
 })();
 
-/* ---------- Waveform decorativa ---------- */
-(function(){
-  var cv = document.getElementById("wf"), ctx = cv.getContext("2d");
-  var seed = 7, rnd = function(){ return (seed = (seed * 16807) % 2147483647) / 2147483647; };
-  var N = 420, amp = [], env = 0;
-  for (var i = 0; i < N; i++){
-    var phrase = Math.sin(i / 30) * Math.sin(i / 9.1);
-    var target = phrase > -0.15 ? 0.25 + Math.abs(phrase) * 0.7 : 0.03;
-    env += (target - env) * 0.25;
-    amp.push(Math.min(1, env * (0.55 + rnd() * 0.45)));
-  }
-  function draw(){
-    var dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight, mid = h / 2;
-    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--wave-dim").trim();
-    var step = w / N;
-    for (var i = 0; i < N; i++){ var a = Math.max(0.5, amp[i] * (mid - 4)); ctx.fillRect(i * step, mid - a, Math.max(1, step * 0.55), a * 2); }
-  }
-  draw(); window.addEventListener("resize", draw);
-  var mq = window.matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", draw);
-})();
 </script>
 </body>
 </html>

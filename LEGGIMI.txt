@@ -9,6 +9,8 @@ Contenuto della cartella
   fonts/         i caratteri, ospitati sul vostro server (nessuna connessione a Google)
   favicon.*, apple-touch-icon.png, icon-*.png, site.webmanifest
                  icone per la scheda del browser e per il telefono
+  img/           foto del team (daniel.jpg; aggiungere aaron.jpg)
+  media/         video di apertura (hero.mp4) e immagine di anteprima (hero-poster.jpg)
   logo/          il logo in SVG e PNG (4000 px, sfondo trasparente), nero e bianco
 
 
@@ -47,3 +49,17 @@ Contenuto della cartella
    Italiano: direttamente nell'HTML.
    Tedesco e inglese: nello script in fondo a index.html, sezione "TRADUZIONI",
    con la stessa chiave (es. "daniel.2").
+
+
+6. VIDEO DI APERTURA / SHOWREEL
+   Il video attuale (media/hero.mp4) è un'animazione originale creata per il sito:
+   nessun diritto di terzi, potete usarlo liberamente.
+   Per mettere lo showreel: esportalo come MP4 (H.264, 1920×1080, senza audio,
+   idealmente 10–30 s e sotto i 10 MB), chiamalo hero.mp4 e sostituisci il file.
+   Sostituisci anche media/hero-poster.jpg con un fotogramma dello showreel
+   (si vede mentre il video carica e per chi ha disattivato le animazioni).
+
+
+7. FOTO DI AARON
+   Metti la foto in img/aaron.jpg (verticale 4:5). In index.html cerca "Foto di Aaron"
+   e sostituisci quel blocco con: <img src="img/aaron.jpg" alt="Aaron Giaier">
