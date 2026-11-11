@@ -1,0 +1,46 @@
+HERMETIC PATH SOUND STUDIO — SITO WEB
+=====================================
+
+Contenuto della cartella
+  index.html     la pagina (IT / DE / EN, cambio lingua con un click in alto a destra)
+  speakers.js    l'elenco degli speaker — l'unico file da modificare per aggiungerli
+  speakers/foto  le foto degli speaker
+  speakers/audio i demo audio
+  fonts/         i caratteri, ospitati sul vostro server (nessuna connessione a Google)
+
+
+1. PRIMA DI ANDARE ONLINE
+   Apri index.html con un editor di testo (es. VS Code, TextEdit in modalità testo),
+   cerca "DATI DELLO STUDIO" e compila:
+     email: "info@..."         → appare nei contatti e sul pulsante Talkback
+     piva:  "IT0123456789"     → appare nel footer (in Italia la P.IVA va indicata sul sito)
+
+
+2. CARICARE IL SITO
+   Carica TUTTO il contenuto di questa cartella (non la cartella stessa) nella
+   cartella principale del tuo hosting (spesso si chiama public_html, www o htdocs),
+   via FTP (es. FileZilla) o dal pannello del provider.
+   In alternativa, gratis e senza FTP: trascina la cartella su https://app.netlify.com/drop
+   e poi collega il tuo dominio.
+   Non serve database né PHP: è un sito statico.
+
+
+3. AGGIUNGERE UNO SPEAKER
+   a) Foto  → speakers/foto/nome-cognome.jpg  (verticale 4:5, circa 800×1000 px)
+   b) Demo  → speakers/audio/nome-cognome-spot.mp3  (MP3 128–192 kbps)
+   c) Apri speakers.js, copia il blocco di esempio, togli i "//" e compila.
+   d) Ricarica sul server speakers.js e i nuovi file.
+   Finché una lingua non ha speaker, il sito mostra la scheda "In arrivo".
+   Nomi file: solo minuscole, numeri e trattini (niente spazi o accenti).
+
+
+4. LINK DIRETTI A UNA LINGUA
+   tuosito.it/?lang=de   tuosito.it/?lang=en   tuosito.it/?lang=it
+   Senza parametro il sito usa la lingua del browser del visitatore
+   (o l'ultima scelta fatta), altrimenti l'italiano.
+
+
+5. MODIFICARE I TESTI
+   Italiano: direttamente nell'HTML.
+   Tedesco e inglese: nello script in fondo a index.html, sezione "TRADUZIONI",
+   con la stessa chiave (es. "daniel.2").

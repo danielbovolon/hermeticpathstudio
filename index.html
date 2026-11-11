@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Hermetic Path Sound Studio — Post-produzione audio e musica, Bolzano</title>
+<meta name="description" content="Hermetic Path Sound Studio, Bolzano · Bozen. Post-produzione audio per film, ADR, speaker IT · DE · EN, musica originale, sound design, mix e mastering.">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%2314171b'/%3E%3Cg fill='%23e2a53c'%3E%3Crect x='6' y='12' width='3' height='8'/%3E%3Crect x='11' y='7' width='3' height='18'/%3E%3Crect x='16' y='10' width='3' height='12'/%3E%3Crect x='21' y='5' width='3' height='22'/%3E%3C/g%3E%3C/svg%3E">
+<style>
+/* Font self-hosted (nessuna richiesta a Google: ok per GDPR) */
+@font-face{font-family:"Big Shoulders Display";font-weight:500;font-display:swap;src:url(fonts/big-shoulders-display-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Big Shoulders Display";font-weight:700;font-display:swap;src:url(fonts/big-shoulders-display-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:"Big Shoulders Display";font-weight:800;font-display:swap;src:url(fonts/big-shoulders-display-latin-800-normal.woff2) format("woff2")}
+@font-face{font-family:"Barlow";font-weight:400;font-display:swap;src:url(fonts/barlow-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Barlow";font-weight:500;font-display:swap;src:url(fonts/barlow-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Barlow";font-weight:600;font-display:swap;src:url(fonts/barlow-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-weight:500;font-display:swap;src:url(fonts/barlow-condensed-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-weight:600;font-display:swap;src:url(fonts/barlow-condensed-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Martian Mono";font-weight:400;font-display:swap;src:url(fonts/martian-mono-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Martian Mono";font-weight:500;font-display:swap;src:url(fonts/martian-mono-latin-500-normal.woff2) format("woff2")}
+
+/* Layout: un mixer letto dall'alto in basso — transport bar, tracce, channel strip, banco voci, EDL, scheda tecnica, talkback. */
+:root{
+  --bg:#14171b; --panel:#1b1f25; --panel-2:#222730; --line:#2e343d;
+  --fg:#e8e3d8; --muted:#8e959f;
+  --cap-red:#d8584c; --cap-amber:#e2a53c; --cap-green:#6fb07c; --cap-blue:#5d8fd3; --cap-violet:#a07fd3; --cap-cream:#d9d3c6;
+  --wave-dim:#4a515b;
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-label:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-mono:"Martian Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){
+  :root{
+    --bg:#e3e1db; --panel:#eeece7; --panel-2:#f6f4f0; --line:#c8c4bb;
+    --fg:#1b1e22; --muted:#5c626a;
+    --cap-red:#b8402f; --cap-amber:#b77812; --cap-green:#3d8650; --cap-blue:#2f67b0; --cap-violet:#7552b0; --cap-cream:#8a8274;
+    --wave-dim:#b3afa6;
+    color-scheme:light;
+  }
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--cap-amber);outline-offset:3px}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;line-height:1;text-wrap:balance;margin:0}
+p{margin:0}
+button{font:inherit;color:inherit}
+.label{font-family:var(--f-label);font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:.8rem;color:var(--muted)}
+
+/* Transport bar */
+.transport{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.transport .wrap{display:flex;align-items:center;gap:16px;padding-block:10px;flex-wrap:wrap}
+.brand{font-family:var(--f-display);font-weight:800;font-size:1.25rem;letter-spacing:.04em;text-transform:uppercase;text-decoration:none;white-space:nowrap}
+.transport nav{display:flex;gap:2px;margin-left:auto;flex-wrap:wrap}
+.transport nav a{white-space:nowrap;font-family:var(--f-label);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:.85rem;text-decoration:none;padding:6px 10px;border:1px solid transparent;border-radius:3px;color:var(--muted)}
+.transport nav a:hover{color:var(--fg);border-color:var(--line)}
+.langsw{display:flex;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.langsw button{font-family:var(--f-mono);font-size:.75rem;padding:6px 9px;background:transparent;border:0;border-right:1px solid var(--line);cursor:pointer;color:var(--muted)}
+.langsw button:last-child{border-right:0}
+.langsw button:hover{color:var(--fg)}
+.langsw button[aria-pressed="true"]{background:var(--cap-amber);color:#14171b}
+@media (max-width:820px){
+  .transport nav{order:3;margin-left:0;width:100%;overflow-x:auto;flex-wrap:nowrap}
+  .langsw{margin-left:auto}
+}
+
+/* Hero */
+.hero{padding-block:64px 40px;display:grid;gap:28px}
+.hero h1{font-size:clamp(3rem,10vw,7.5rem);font-weight:800;text-transform:uppercase;letter-spacing:-.01em}
+.hero h1 span{display:block;color:var(--muted);font-weight:500}
+.hero .lede{max-width:60ch;font-size:1.2rem}
+.cta{display:flex;gap:10px;flex-wrap:wrap}
+.btn{font-family:var(--f-label);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:.9rem;text-decoration:none;padding:10px 18px;border-radius:3px;border:1px solid var(--line);background:var(--panel)}
+.btn:hover{border-color:var(--fg)}
+.btn.primary{background:var(--cap-amber);border-color:var(--cap-amber);color:#14171b}
+.wave{display:block;width:100%;height:110px}
+
+section{padding-block:56px;border-top:1px solid var(--line)}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:28px;flex-wrap:wrap}
+.sec-head h2{font-size:clamp(2rem,5vw,3.2rem);text-transform:uppercase}
+.intro{max-width:65ch;margin-bottom:28px;font-size:1.1rem}
+
+/* Tracce (chi siamo) */
+.tracks{display:grid;gap:12px}
+.track{display:grid;grid-template-columns:140px 1fr;border:1px solid var(--line);background:var(--panel);border-radius:4px;overflow:hidden}
+.track-hdr{background:var(--panel-2);border-right:1px solid var(--line);padding:16px;display:flex;flex-direction:column;gap:10px}
+.track-hdr .name{font-family:var(--f-display);font-weight:700;font-size:1.6rem;text-transform:uppercase;line-height:1}
+.track-body{padding:18px 20px;display:grid;gap:12px;min-width:0}
+.track-body ul{margin:0;padding-left:1.1em;display:grid;gap:4px}
+.track.t1 .track-hdr{border-left:6px solid var(--cap-blue)}
+.track.t2 .track-hdr{border-left:6px solid var(--cap-green)}
+@media (max-width:640px){.track{grid-template-columns:1fr}.track-hdr{border-right:0;border-bottom:1px solid var(--line)}}
+
+/* Channel strip (servizi) */
+.console{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--panel)}
+.strip{display:flex;flex-direction:column;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-width:0}
+.strip:nth-child(4n){border-right:0}
+.strip:nth-last-child(-n+4){border-bottom:0}
+.cap{height:8px;background:var(--c)}
+.strip-top{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 0}
+.strip-top .ch{font-family:var(--f-mono);font-size:.75rem;color:var(--muted)}
+.strip-top .tag{font-family:var(--f-label);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;border:1px solid var(--c);color:var(--c);padding:1px 6px;border-radius:2px}
+.strip h3{font-size:1.45rem;text-transform:uppercase;padding:10px 14px 8px}
+.strip p{padding:0 14px 18px;font-size:.95rem;color:var(--muted);flex:1}
+@media (max-width:900px){
+  .console{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .strip:nth-child(4n){border-right:1px solid var(--line)}
+  .strip:nth-child(2n){border-right:0}
+  .strip:nth-last-child(-n+4){border-bottom:1px solid var(--line)}
+  .strip:nth-last-child(-n+2){border-bottom:0}
+}
+@media (max-width:520px){
+  .console{grid-template-columns:1fr}
+  .strip{border-right:0!important}
+  .strip:nth-last-child(-n+2){border-bottom:1px solid var(--line)}
+  .strip:last-child{border-bottom:0}
+}
+
+/* Banco voci (speaker) */
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.filters button{font-family:var(--f-mono);font-size:.8rem;padding:6px 12px;border-radius:3px;border:1px solid var(--line);background:var(--panel);cursor:pointer;color:var(--muted)}
+.filters button:hover{color:var(--fg)}
+.filters button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.voices{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.voice{border:1px solid var(--line);border-radius:4px;background:var(--panel);overflow:hidden;display:flex;flex-direction:column;--c:var(--cap-blue)}
+.voice[data-lang="it"]{--c:var(--cap-green)}
+.voice[data-lang="de"]{--c:var(--cap-red)}
+.voice[data-lang="en"]{--c:var(--cap-blue)}
+.voice .photo{position:relative;aspect-ratio:4/5;background:var(--panel-2);display:grid;place-items:center;overflow:hidden}
+.voice .photo img{width:100%;height:100%;object-fit:cover}
+.voice .initials{font-family:var(--f-display);font-weight:800;font-size:4rem;color:var(--muted)}
+.voice .langs{position:absolute;top:10px;left:10px;display:flex;gap:4px}
+.voice .langs span{font-family:var(--f-mono);font-size:.7rem;padding:2px 7px;border-radius:2px;background:var(--c);color:#14171b}
+.voice .langs span.it{background:var(--cap-green)}.voice .langs span.de{background:var(--cap-red)}.voice .langs span.en{background:var(--cap-blue)}
+.voice-body{padding:14px;display:grid;gap:10px;flex:1;align-content:start}
+.voice h3{font-size:1.5rem;text-transform:uppercase}
+.voice .desc{font-size:.92rem;color:var(--muted)}
+.demos{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.demo{display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;padding:6px 8px 6px 6px;border:1px solid var(--line);border-radius:3px;background:var(--panel-2)}
+.play{width:34px;height:34px;border-radius:50%;border:1px solid var(--c);background:transparent;cursor:pointer;display:grid;place-items:center;color:var(--c)}
+.play:hover{background:var(--c);color:#14171b}
+.play svg{width:12px;height:12px;fill:currentColor}
+.play .i-pause{display:none}
+.demo.playing .play{background:var(--c);color:#14171b}
+.demo.playing .i-play{display:none}
+.demo.playing .i-pause{display:block}
+.demo .dt{font-family:var(--f-label);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:.85rem;min-width:0;display:grid;gap:4px}
+.demo .bar{height:3px;background:var(--line);border-radius:2px;overflow:hidden;cursor:pointer}
+.demo .bar i{display:block;height:100%;width:0;background:var(--c)}
+.demo .time{font-family:var(--f-mono);font-size:.7rem;color:var(--muted)}
+.voice.soon{border-style:dashed;background:transparent}
+.voice.soon .photo{background:repeating-linear-gradient(135deg,transparent 0 10px,var(--panel) 10px 20px)}
+.voice.soon .photo svg{width:64px;height:64px;fill:none;stroke:var(--muted);stroke-width:1.5}
+.voice.soon .demo{opacity:.45}
+@media (max-width:600px){
+  .voices{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  .voice .photo{aspect-ratio:1/1}
+  .voice.soon .photo{aspect-ratio:2/1}
+  .voice.soon .photo svg{width:40px;height:40px}
+}
+.voice.soon .play{cursor:default}
+.voice.soon .play:hover{background:transparent;color:var(--c)}
+
+/* EDL (come lavoriamo) */
+.edl{border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--panel)}
+.edl-row{display:grid;grid-template-columns:70px 200px 1fr;gap:16px;padding:14px 18px;border-bottom:1px solid var(--line);align-items:baseline}
+.edl-row:last-child{border-bottom:0}
+.edl-row .n{font-family:var(--f-mono);font-size:.8rem;color:var(--cap-amber)}
+.edl-row .t{font-family:var(--f-display);font-weight:700;font-size:1.3rem;text-transform:uppercase;line-height:1.1}
+.edl-row p{color:var(--muted)}
+@media (max-width:700px){.edl-row{grid-template-columns:50px 1fr}.edl-row p{grid-column:2}}
+
+/* Routing (clienti) */
+.routing{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.bus{border:1px solid var(--line);border-radius:4px;padding:14px;display:grid;gap:4px;background:var(--panel)}
+.bus .n{font-family:var(--f-mono);font-size:.72rem;color:var(--cap-amber)}
+.bus .t{font-family:var(--f-display);font-weight:700;font-size:1.3rem;text-transform:uppercase}
+.langbox{margin-top:24px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding:16px;border:1px dashed var(--line);border-radius:4px}
+.langbox .pills{display:flex;gap:6px}
+.langbox .pills span{font-family:var(--f-mono);font-size:.85rem;padding:4px 10px;border-radius:2px;background:var(--fg);color:var(--bg)}
+.langbox p{flex:1;min-width:220px}
+
+/* Scheda tecnica (studio) */
+.studio{display:grid;grid-template-columns:1fr 1.2fr;gap:32px;align-items:start}
+.studio > div{min-width:0}
+.studio .txt{display:grid;gap:14px;max-width:60ch}
+.spec{width:100%;border-collapse:collapse;font-size:.95rem}
+.spec th,.spec td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.spec th{font-family:var(--f-label);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:.78rem;color:var(--muted);width:40%}
+.spec td{font-family:var(--f-mono);font-size:.85rem}
+.status{display:inline-block;font-family:var(--f-label);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;padding:1px 6px;border-radius:2px;border:1px solid var(--cap-amber);color:var(--cap-amber);margin-left:6px;vertical-align:1px}
+@media (max-width:820px){.studio{grid-template-columns:1fr}}
+
+/* Talkback (contatti) */
+.talkback{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center}
+.tb-btn{width:150px;height:150px;border-radius:50%;border:2px solid var(--cap-red);display:grid;place-items:center;text-align:center;font-family:var(--f-label);font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--cap-red);font-size:.9rem;background:var(--panel);text-decoration:none}
+.tb-btn:hover{background:var(--cap-red);color:#14171b}
+.tb-text{display:grid;gap:14px;min-width:0}
+.tb-text h2{font-size:clamp(2rem,5vw,3.2rem);text-transform:uppercase}
+.contact-row{display:flex;gap:10px 28px;flex-wrap:wrap}
+.contact-row div{display:grid;gap:2px}
+.contact-row .v{font-family:var(--f-mono);font-size:.9rem}
+@media (max-width:560px){.talkback{grid-template-columns:1fr}.tb-btn{width:110px;height:110px}}
+
+footer{border-top:1px solid var(--line);padding-block:20px;color:var(--muted);font-size:.85rem;padding-bottom:max(20px,env(safe-area-inset-bottom,0px))}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<header class="transport">
+  <div class="wrap">
+    <a class="brand" href="#top">Hermetic Path</a>
+    <nav id="mainnav" aria-label="Sezioni">
+      <a href="#chi-siamo" data-i18n="nav.about">Chi siamo</a>
+      <a href="#servizi" data-i18n="nav.services">Servizi</a>
+      <a href="#speaker" data-i18n="nav.voices">Speaker</a>
+      <a href="#studio" data-i18n="nav.studio">Studio</a>
+      <a href="#contatti" data-i18n="nav.contact">Contatti</a>
+    </nav>
+    <div class="langsw" role="group" aria-label="Lingua / Sprache / Language">
+      <button type="button" data-setlang="it" aria-pressed="true" lang="it">IT</button>
+      <button type="button" data-setlang="de" aria-pressed="false" lang="de">DE</button>
+      <button type="button" data-setlang="en" aria-pressed="false" lang="en">EN</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <p class="label" data-i18n="hero.kicker">Studio di registrazione e post-produzione · Bolzano</p>
+    <h1>Hermetic Path <span>Sound Studio</span></h1>
+    <p class="lede" data-i18n="hero.lede">Post-produzione audio per film, ADR, voci, musica originale e sound design. Lavoriamo nel centro storico di Bolzano, in italiano, tedesco e inglese.</p>
+    <div class="cta">
+      <a class="btn primary" href="#contatti" data-i18n="hero.cta1">Richiedi un preventivo</a>
+      <a class="btn" href="#speaker" data-i18n="hero.cta2">Ascolta gli speaker</a>
+    </div>
+    <canvas id="wf" class="wave" aria-hidden="true"></canvas>
+  </div>
+
+  <section id="chi-siamo">
+    <div class="wrap">
+      <div class="sec-head"><h2 data-i18n="about.h">Chi siamo</h2><span class="label" data-i18n="about.lbl">2 tracce · registrazione armata</span></div>
+      <p class="intro" data-i18n="about.intro">Hermetic Path nasce dall'unione dell'Atelier Neun di Aaron Giaier con il lavoro di Daniel Bovolon. Siamo due tecnici del suono formati a Berlino, con oltre vent'anni di esperienza complessiva, tornati in Alto Adige per aprire uno studio professionale al servizio delle produzioni locali e internazionali.</p>
+      <div class="tracks">
+        <article class="track t1">
+          <div class="track-hdr"><span class="name">Daniel<br>Bovolon</span></div>
+          <div class="track-body">
+            <p class="label">Tonmeister · Sound designer · Field recordist</p>
+            <ul>
+              <li data-i18n="daniel.1">Formazione a Berlino.</li>
+              <li data-i18n="daniel.2">Presa diretta, post-produzione, sound design e mix per film, serie, pubblicità e produzioni di ogni formato.</li>
+              <li data-i18n="daniel.3">Produzione musicale.</li>
+              <li data-i18n="daniel.4">Tecnico audio, luci e palco per eventi e festival, tra cui Transart Festival.</li>
+            </ul>
+          </div>
+        </article>
+        <article class="track t2">
+          <div class="track-hdr"><span class="name">Aaron<br>Giaier</span></div>
+          <div class="track-body">
+            <p class="label" data-i18n="aaron.role">Post-produzione film · ADR · Doppiaggio</p>
+            <ul>
+              <li data-i18n="aaron.1">Formazione a Berlino.</li>
+              <li data-i18n="aaron.2">10 anni di esperienza a Berlino negli studi di doppiaggio e post-produzione, tra cui Oxygen Sound e K13.</li>
+              <li data-i18n="aaron.3">Montaggio dialoghi su oltre 100 serie anime e numerosi film.</li>
+              <li data-i18n="aaron.4">Produzione musicale, The Nine Records.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="servizi">
+    <div class="wrap">
+      <div class="sec-head"><h2 data-i18n="svc.h">Servizi</h2><span class="label" data-i18n="svc.lbl">Banco 1 · canali 1–8</span></div>
+      <div class="console">
+        <article class="strip" style="--c:var(--cap-red)">
+          <div class="cap"></div>
+          <div class="strip-top"><span class="ch">CH 01</span><span class="tag">Film</span></div>
+          <h3 data-i18n="s1.h">Post audio film</h3>
+          <p data-i18n="s1.p">Dalla A alla Z: montaggio dialoghi, sound design, Foley, premix e mix finale, con consegna di stem e M&amp;E.</p>
+        </article>
+        <article class="strip" style="--c:var(--cap-red)">
+          <div class="cap"></div>
+          <div class="strip-top"><span class="ch">CH 02</span><span class="tag">Film</span></div>
+          <h3 data-i18n="s2.h">ADR e doppiaggio</h3>
+          <p data-i18n="s2.p">Registrazione di dialoghi in sincrono con l'immagine, gestione di take e timecode, edit pronto per il mix.</p>
+        </article>
+        <article class="strip" style="--c:var(--cap-blue)">
+          <div class="cap"></div>
+          <div class="strip-top"><span class="ch">CH 03</span><span class="tag" data-i18n="tag.voice">Voce</span></div>
+          <h3 data-i18n="s3.h">Speaker IT · DE · EN</h3>
+          <p data-i18n="s3.p">Voci madrelingua per spot, video istituzionali, documentari e TV. Ascolta i demo nella sezione <a href="#speaker">Speaker</a>.</p>
+        </article>
+        <article class="strip" style="--c:var(--cap-blue)">
+          <div class="cap"></div>
+          <div class="strip-top"><span class="ch">CH 04</span><span class="tag" data-i18n="tag.voice">Voce</span></div>
+          <h3 data-i18n="s4.h">Voce, audiolibri e podcast</h3>
+          <p data-i18n="s4.p">Sessioni in studio con fonico: registrazione voce, audiolibri e podcast, editing e consegna secondo le specifiche delle piattaforme.</p>
+        </article>
+        <article class="strip" style="--c:var(--cap-violet)">
+          <div class="cap"></div>
+          <div class="strip-top"><span class="ch">CH 05</span><span class="tag">Sound</span></div>
+          <h3 data-i18n="s5.h">Sound design e Foley</h3>
+          <p data-i18n="s5.p">Ambienti, effetti e Foley per film, cortometraggi, spot pubblicitari e installazioni.</p>
+        </article>
+        <article class="strip" style="--c:var(--cap-violet)">
+          <div class="cap"></div>
+          <div class="strip-top"><span class="ch">CH 06</span><span class="tag">Broadcast</span></div>
+          <h3 data-i18n="s6.h">Restauro e mix broadcast</h3>
+          <p data-i18n="s6.p">Pulizia di rumori, fruscii e click, livellamento e mix per TV, radio e web, conforme a EBU R128.</p>
+        </article>
+        <article class="strip" style="--c:var(--cap-green)">
+          <div class="cap"></div>
+          <div class="strip-top"><span class="ch">CH 07</span><span class="tag" data-i18n="tag.music">Musica</span></div>
+          <h3 data-i18n="s7.h">Musica originale e licenze</h3>
+          <p data-i18n="s7.p">Colonne sonore e musica su misura, anche in esclusiva, oppure brani del nostro catalogo con licenza non esclusiva per TV, spot e film.</p>
+        </article>
+        <article class="strip" style="--c:var(--cap-green)">
+          <div class="cap"></div>
+          <div class="strip-top"><span class="ch">CH 08</span><span class="tag" data-i18n="tag.music">Musica</span></div>
+          <h3 data-i18n="s8.h">Produzione, mix e mastering</h3>
+          <p data-i18n="s8.p">Registrazione voce e tuning, mix multitraccia e mastering per streaming, CD e broadcast, dall'editing al master finale.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="speaker">
+    <div class="wrap">
+      <div class="sec-head"><h2 data-i18n="vo.h">Speaker</h2><span class="label" data-i18n="vo.lbl">Banco voci · IT · DE · EN</span></div>
+      <p class="intro" data-i18n="vo.intro">Voci madrelingua italiane, tedesche e inglesi, registrate e dirette nel nostro studio. Ascolta i demo e scrivici per disponibilità e preventivo.</p>
+      <div class="filters" role="group" aria-label="Filtro lingua">
+        <button type="button" data-filter="all" aria-pressed="true" data-i18n="vo.all">Tutti</button>
+        <button type="button" data-filter="it" aria-pressed="false">IT</button>
+        <button type="button" data-filter="de" aria-pressed="false">DE</button>
+        <button type="button" data-filter="en" aria-pressed="false">EN</button>
+      </div>
+      <div class="voices" id="voices"></div>
+    </div>
+  </section>
+
+  <section id="metodo">
+    <div class="wrap">
+      <div class="sec-head"><h2 data-i18n="how.h">Come lavoriamo</h2><span class="label" data-i18n="how.lbl">EDL · lista eventi</span></div>
+      <div class="edl">
+        <div class="edl-row"><span class="n">001</span><span class="t" data-i18n="how.1t">Preventivo</span><p data-i18n="how.1p">Ogni progetto parte da un preventivo su misura, in base a durata, formato e consegna.</p></div>
+        <div class="edl-row"><span class="n">002</span><span class="t" data-i18n="how.2t">Sessioni in studio</span><p data-i18n="how.2p">Lo studio si prenota a ore, a mezza giornata o a giornata intera, sempre con un nostro fonico.</p></div>
+        <div class="edl-row"><span class="n">003</span><span class="t" data-i18n="how.3t">Revisioni</span><p data-i18n="how.3p">Due revisioni incluse in ogni lavoro a progetto.</p></div>
+        <div class="edl-row"><span class="n">004</span><span class="t" data-i18n="how.4t">Consegna</span><p data-i18n="how.4p">WAV 24 bit / 48 kHz, stem, M&amp;E e AAF; mix broadcast conformi a EBU R128 su richiesta.</p></div>
+        <div class="edl-row"><span class="n">005</span><span class="t" data-i18n="how.5t">Musica</span><p data-i18n="how.5p">I diritti sui brani restano allo studio; l'uso è regolato da una licenza scritta: produzione, canali, territorio, durata, esclusiva.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="clienti">
+    <div class="wrap">
+      <div class="sec-head"><h2 data-i18n="cl.h">Per chi lavoriamo</h2><span class="label" data-i18n="cl.lbl">Routing · uscite bus</span></div>
+      <div class="routing">
+        <div class="bus"><span class="n">BUS 1</span><span class="t" data-i18n="cl.1">Cinema</span></div>
+        <div class="bus"><span class="n">BUS 2</span><span class="t" data-i18n="cl.2">Teatro</span></div>
+        <div class="bus"><span class="n">BUS 3</span><span class="t" data-i18n="cl.3">Pubblicità</span></div>
+        <div class="bus"><span class="n">BUS 4</span><span class="t" data-i18n="cl.4">TV e radio</span></div>
+        <div class="bus"><span class="n">BUS 5</span><span class="t" data-i18n="cl.5">Editoria audio</span></div>
+        <div class="bus"><span class="n">BUS 6</span><span class="t" data-i18n="cl.6">Musei</span></div>
+        <div class="bus"><span class="n">BUS 7</span><span class="t" data-i18n="cl.7">Musicisti</span></div>
+      </div>
+      <div class="langbox">
+        <div class="pills"><span>IT</span><span>DE</span><span>EN</span></div>
+        <p data-i18n="cl.lang">In Alto Adige molte produzioni escono in due o tre lingue. Registriamo, dirigiamo e montiamo voci in italiano, tedesco e inglese nella stessa sessione, così le versioni restano coerenti.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="studio">
+    <div class="wrap">
+      <div class="sec-head"><h2 data-i18n="st.h">Lo studio</h2><span class="label" data-i18n="st.lbl">Scheda tecnica</span></div>
+      <div class="studio">
+        <div class="txt">
+          <p data-i18n="st.p1">Lo studio si trova nel centro storico di Bolzano. La sala è trattata acusticamente ed è pensata per registrazione voce, ADR, sound design, mix e mastering.</p>
+          <p data-i18n="st.p2">Il setup è modulare: film, musica e voce lavorano nella stessa stanza.</p>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="spec">
+            <tbody>
+              <tr><th data-i18n="st.r1">Ascolto principale</th><td>Yamaha HS8</td></tr>
+              <tr><th data-i18n="st.r2">Ascolto secondario</th><td>IK iLoud Micro Monitor</td></tr>
+              <tr><th data-i18n="st.r3">Interfaccia</th><td>RME Fireface 802</td></tr>
+              <tr><th>Surround</th><td>7.1 <span class="status" data-i18n="st.wip">in allestimento</span></td></tr>
+              <tr><th data-i18n="st.r5">Sala</th><td data-i18n="st.r5v">Trattata acusticamente</td></tr>
+              <tr><th data-i18n="st.r6">Consegne</th><td>WAV · BWF · stem · M&amp;E · AAF</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contatti">
+    <div class="wrap talkback">
+      <a class="tb-btn" id="tb" href="#contatti" aria-label="Email">Talk<br>back</a>
+      <div class="tb-text">
+        <h2 data-i18n="ct.h">Parliamo del progetto</h2>
+        <p data-i18n="ct.p">Mandaci una descrizione, la durata e la data di consegna. Rispondiamo in italiano, tedesco o inglese con un preventivo.</p>
+        <div class="contact-row">
+          <div><span class="label">Email</span><a class="v" id="email" href="#contatti">[email dello studio]</a></div>
+          <div><span class="label" data-i18n="ct.where">Dove</span><span class="v" data-i18n="ct.addr">Centro storico · 39100 Bolzano</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Hermetic Path Sound Studio · Bolzano / Bozen</span>
+    <span id="vat"></span>
+  </div>
+</footer>
+
+<script src="speakers.js"></script>
+<script>
+/* ============================================================
+   DATI DELLO STUDIO — da compilare prima di andare online
+   ============================================================ */
+var STUDIO = {
+  email: "",   // es. "info@hermeticpath.studio"
+  piva:  ""    // Partita IVA, es. "IT01234567890" (obbligatoria sul sito per chi ha P.IVA)
+};
+
+/* ============================================================
+   TRADUZIONI (l'italiano è il testo già scritto nell'HTML)
+   ============================================================ */
+var T = {
+  de: {
+    "nav.about":"Über uns","nav.services":"Leistungen","nav.voices":"Sprecher","nav.studio":"Studio","nav.contact":"Kontakt",
+    "hero.kicker":"Tonstudio für Aufnahme und Postproduktion · Bozen",
+    "hero.lede":"Audio-Postproduktion für Film, ADR, Sprachaufnahmen, Originalmusik und Sounddesign. Wir arbeiten in der Bozner Altstadt – auf Italienisch, Deutsch und Englisch.",
+    "hero.cta1":"Angebot anfragen","hero.cta2":"Sprecher anhören",
+    "about.h":"Über uns","about.lbl":"2 Spuren · Aufnahme scharf",
+    "about.intro":"Hermetic Path entsteht aus Aaron Giaiers Atelier Neun und der Arbeit von Daniel Bovolon. Wir sind zwei in Berlin ausgebildete Toningenieure mit zusammen über zwanzig Jahren Erfahrung, zurück in Südtirol, um ein professionelles Studio für lokale und internationale Produktionen zu betreiben.",
+    "daniel.1":"Ausbildung in Berlin.",
+    "daniel.2":"Originalton, Postproduktion, Sounddesign und Mischung für Film, Serien, Werbung und Produktionen jeden Formats.",
+    "daniel.3":"Musikproduktion.",
+    "daniel.4":"Ton-, Licht- und Bühnentechniker für Events und Festivals, darunter das Transart Festival.",
+    "aaron.role":"Filmpostproduktion · ADR · Synchron",
+    "aaron.1":"Ausbildung in Berlin.",
+    "aaron.2":"10 Jahre Erfahrung in Berliner Synchron- und Postproduktionsstudios, darunter Oxygen Sound und K13.",
+    "aaron.3":"Dialogschnitt für über 100 Anime-Serien und zahlreiche Filme.",
+    "aaron.4":"Musikproduktion, The Nine Records.",
+    "svc.h":"Leistungen","svc.lbl":"Bank 1 · Kanäle 1–8",
+    "tag.voice":"Stimme","tag.music":"Musik",
+    "s1.h":"Film-Tonpostproduktion","s1.p":"Von A bis Z: Dialogschnitt, Sounddesign, Foley, Premix und Endmischung, mit Lieferung von Stems und IT-Band (M&amp;E).",
+    "s2.h":"ADR und Synchron","s2.p":"Bildsynchrone Dialogaufnahmen, Take- und Timecode-Verwaltung, mischfertiger Schnitt.",
+    "s3.h":"Sprecher IT · DE · EN","s3.p":"Muttersprachliche Stimmen für Werbung, Imagefilme, Dokumentarfilme und TV. Hörproben im Bereich <a href=\"#speaker\">Sprecher</a>.",
+    "s4.h":"Sprache, Hörbücher, Podcasts","s4.p":"Studiosessions mit Toningenieur: Sprachaufnahmen, Hörbücher und Podcasts, Schnitt und Lieferung nach den Vorgaben der Plattformen.",
+    "s5.h":"Sounddesign und Foley","s5.p":"Atmos, Effekte und Foley für Film, Kurzfilm, Werbung und Installationen.",
+    "s6.h":"Restaurierung und Broadcast-Mix","s6.p":"Entfernen von Rauschen, Klicks und Störgeräuschen, Pegelung und Mischung für TV, Radio und Web nach EBU R128.",
+    "s7.h":"Originalmusik und Lizenzen","s7.p":"Filmmusik und maßgeschneiderte Kompositionen, auch exklusiv, oder Stücke aus unserem Katalog mit nicht-exklusiver Lizenz für TV, Werbung und Film.",
+    "s8.h":"Produktion, Mix und Mastering","s8.p":"Gesangsaufnahme und Tuning, Mehrspurmischung und Mastering für Streaming, CD und Broadcast – vom Schnitt bis zum fertigen Master.",
+    "vo.h":"Sprecher","vo.lbl":"Stimmenbank · IT · DE · EN",
+    "vo.intro":"Muttersprachliche Stimmen auf Italienisch, Deutsch und Englisch, aufgenommen und geführt in unserem Studio. Hören Sie in die Demos hinein und fragen Sie uns nach Verfügbarkeit und Angebot.",
+    "vo.all":"Alle",
+    "how.h":"So arbeiten wir","how.lbl":"EDL · Ereignisliste",
+    "how.1t":"Angebot","how.1p":"Jedes Projekt beginnt mit einem individuellen Angebot nach Länge, Format und Abgabe.",
+    "how.2t":"Studiozeit","how.2p":"Das Studio ist stundenweise, halb- oder ganztags buchbar, immer mit einem unserer Toningenieure.",
+    "how.3t":"Korrekturen","how.3p":"Zwei Korrekturschleifen sind in jedem Projekt enthalten.",
+    "how.4t":"Lieferung","how.4p":"WAV 24 Bit / 48 kHz, Stems, M&amp;E und AAF; Broadcast-Mischungen nach EBU R128 auf Anfrage.",
+    "how.5t":"Musik","how.5p":"Die Rechte an der Musik bleiben beim Studio; die Nutzung regelt eine schriftliche Lizenz: Produktion, Kanäle, Gebiet, Dauer, Exklusivität.",
+    "cl.h":"Für wen wir arbeiten","cl.lbl":"Routing · Bus-Ausgänge",
+    "cl.1":"Film","cl.2":"Theater","cl.3":"Werbung","cl.4":"TV und Radio","cl.5":"Hörbuchverlage","cl.6":"Museen","cl.7":"Musiker",
+    "cl.lang":"In Südtirol erscheinen viele Produktionen in zwei oder drei Sprachen. Wir nehmen Stimmen auf Italienisch, Deutsch und Englisch in derselben Session auf, führen Regie und schneiden sie – so bleiben alle Versionen stimmig.",
+    "st.h":"Das Studio","st.lbl":"Technisches Datenblatt",
+    "st.p1":"Das Studio liegt in der Bozner Altstadt. Der Raum ist akustisch behandelt und für Sprachaufnahmen, ADR, Sounddesign, Mischung und Mastering ausgelegt.",
+    "st.p2":"Das Setup ist modular: Film, Musik und Sprache arbeiten im selben Raum.",
+    "st.r1":"Hauptabhöre","st.r2":"Zweitabhöre","st.r3":"Interface","st.wip":"im Aufbau","st.r5":"Raum","st.r5v":"Akustisch behandelt","st.r6":"Lieferformate",
+    "ct.h":"Sprechen wir über Ihr Projekt",
+    "ct.p":"Schicken Sie uns eine kurze Beschreibung, die Laufzeit und den Abgabetermin. Wir antworten auf Italienisch, Deutsch oder Englisch mit einem Angebot.",
+    "ct.where":"Wo","ct.addr":"Altstadt · 39100 Bozen"
+  },
+  en: {
+    "nav.about":"About","nav.services":"Services","nav.voices":"Voices","nav.studio":"Studio","nav.contact":"Contact",
+    "hero.kicker":"Recording and post-production studio · Bolzano",
+    "hero.lede":"Audio post-production for film, ADR, voice, original music and sound design. We work in Bolzano's old town, in Italian, German and English.",
+    "hero.cta1":"Request a quote","hero.cta2":"Listen to the voices",
+    "about.h":"About us","about.lbl":"2 tracks · armed for recording",
+    "about.intro":"Hermetic Path brings together Aaron Giaier's Atelier Neun and the work of Daniel Bovolon. We are two Berlin-trained sound engineers with more than twenty years of combined experience, back in South Tyrol to run a professional studio for local and international productions.",
+    "daniel.1":"Trained in Berlin.",
+    "daniel.2":"Location sound, post-production, sound design and mixing for film, series, advertising and productions of every format.",
+    "daniel.3":"Music production.",
+    "daniel.4":"Sound, lighting and stage technician for events and festivals, including Transart Festival.",
+    "aaron.role":"Film post-production · ADR · Dubbing",
+    "aaron.1":"Trained in Berlin.",
+    "aaron.2":"10 years in Berlin dubbing and post-production studios, including Oxygen Sound and K13.",
+    "aaron.3":"Dialogue editing on more than 100 anime series and numerous films.",
+    "aaron.4":"Music production, The Nine Records.",
+    "svc.h":"Services","svc.lbl":"Bank 1 · channels 1–8",
+    "tag.voice":"Voice","tag.music":"Music",
+    "s1.h":"Film audio post","s1.p":"End to end: dialogue editing, sound design, Foley, premix and final mix, with stems and M&amp;E delivered.",
+    "s2.h":"ADR and dubbing","s2.p":"Dialogue recorded in sync with picture, take and timecode management, edit ready for the mix.",
+    "s3.h":"Voice talent IT · DE · EN","s3.p":"Native voices for commercials, corporate films, documentaries and TV. Listen to the demos in the <a href=\"#speaker\">Voices</a> section.",
+    "s4.h":"Voice, audiobooks, podcasts","s4.p":"Studio sessions with an engineer: voice recording, audiobooks and podcasts, editing and delivery to platform specs.",
+    "s5.h":"Sound design and Foley","s5.p":"Ambiences, effects and Foley for film, shorts, commercials and installations.",
+    "s6.h":"Restoration and broadcast mix","s6.p":"Removal of noise, hiss and clicks, levelling and mixing for TV, radio and web, compliant with EBU R128.",
+    "s7.h":"Original music and licensing","s7.p":"Scores and bespoke music, exclusive if needed, or tracks from our catalogue under a non-exclusive licence for TV, ads and film.",
+    "s8.h":"Production, mix and mastering","s8.p":"Vocal recording and tuning, multitrack mixing and mastering for streaming, CD and broadcast, from editing to final master.",
+    "vo.h":"Voices","vo.lbl":"Voice bank · IT · DE · EN",
+    "vo.intro":"Native Italian, German and English voices, recorded and directed in our studio. Listen to the demos and get in touch for availability and a quote.",
+    "vo.all":"All",
+    "how.h":"How we work","how.lbl":"EDL · event list",
+    "how.1t":"Quote","how.1p":"Every project starts with a tailored quote based on length, format and delivery.",
+    "how.2t":"Studio time","how.2p":"Book the studio by the hour, half day or full day, always with one of our engineers.",
+    "how.3t":"Revisions","how.3p":"Two rounds of revisions included in every project.",
+    "how.4t":"Delivery","how.4p":"WAV 24-bit / 48 kHz, stems, M&amp;E and AAF; broadcast mixes to EBU R128 on request.",
+    "how.5t":"Music","how.5p":"The studio keeps the rights to the music; use is set out in a written licence: production, channels, territory, term, exclusivity.",
+    "cl.h":"Who we work for","cl.lbl":"Routing · bus outputs",
+    "cl.1":"Cinema","cl.2":"Theatre","cl.3":"Advertising","cl.4":"TV and radio","cl.5":"Audio publishing","cl.6":"Museums","cl.7":"Musicians",
+    "cl.lang":"In South Tyrol many productions are released in two or three languages. We record, direct and edit voices in Italian, German and English in the same session, so every version stays consistent.",
+    "st.h":"The studio","st.lbl":"Spec sheet",
+    "st.p1":"The studio is in Bolzano's old town. The room is acoustically treated and built for voice recording, ADR, sound design, mixing and mastering.",
+    "st.p2":"The setup is modular: film, music and voice all work in the same room.",
+    "st.r1":"Main monitors","st.r2":"Secondary monitors","st.r3":"Interface","st.wip":"being installed","st.r5":"Room","st.r5v":"Acoustically treated","st.r6":"Deliverables",
+    "ct.h":"Let's talk about your project",
+    "ct.p":"Send us a short description, the running time and the delivery date. We'll reply in Italian, German or English with a quote.",
+    "ct.where":"Where","ct.addr":"Old town · 39100 Bolzano"
+  }
+};
+
+/* Testi generati dallo script (meta, speaker) */
+var UI = {
+  it: { title:"Hermetic Path Sound Studio — Post-produzione audio e musica, Bolzano",
+        desc:"Hermetic Path Sound Studio, Bolzano · Bozen. Post-produzione audio per film, ADR, speaker IT · DE · EN, musica originale, sound design, mix e mastering.",
+        nav:"Sezioni", filter:"Filtro lingua", soon:"In arrivo", soonTxt:"Nuove voci in questa lingua a breve.",
+        play:"Ascolta", pause:"Pausa", vat:"P.IVA", emailPh:"[email dello studio]" },
+  de: { title:"Hermetic Path Sound Studio — Audio-Postproduktion und Musik, Bozen",
+        desc:"Hermetic Path Sound Studio, Bozen · Bolzano. Audio-Postproduktion für Film, ADR, Sprecher IT · DE · EN, Originalmusik, Sounddesign, Mischung und Mastering.",
+        nav:"Bereiche", filter:"Sprachfilter", soon:"Demnächst", soonTxt:"Neue Stimmen in dieser Sprache folgen in Kürze.",
+        play:"Anhören", pause:"Pause", vat:"MwSt.-Nr.", emailPh:"[Studio-E-Mail]" },
+  en: { title:"Hermetic Path Sound Studio — Audio post-production and music, Bolzano",
+        desc:"Hermetic Path Sound Studio, Bolzano · Bozen. Audio post-production for film, ADR, voice talent IT · DE · EN, original music, sound design, mixing and mastering.",
+        nav:"Sections", filter:"Language filter", soon:"Coming soon", soonTxt:"New voices in this language coming soon.",
+        play:"Play", pause:"Pause", vat:"VAT no.", emailPh:"[studio email]" }
+};
+var LANG_NAMES = { it:"Italiano", de:"Deutsch", en:"English" };
+
+var lang = "it";
+var nodes = document.querySelectorAll("[data-i18n]");
+var IT = {};
+nodes.forEach(function(n){ IT[n.getAttribute("data-i18n")] = n.innerHTML; });
+
+function pick(v){ if (v == null) return ""; if (typeof v === "string") return v; return v[lang] || v.it || v.en || v.de || ""; }
+
+function setLang(l){
+  if (!T[l] && l !== "it") l = "it";
+  lang = l;
+  var dict = l === "it" ? IT : T[l];
+  nodes.forEach(function(n){ var k = n.getAttribute("data-i18n"); if (dict[k] != null) n.innerHTML = dict[k]; });
+  document.documentElement.lang = l;
+  document.title = UI[l].title;
+  document.querySelector('meta[name="description"]').setAttribute("content", UI[l].desc);
+  document.getElementById("mainnav").setAttribute("aria-label", UI[l].nav);
+  document.querySelector(".filters").setAttribute("aria-label", UI[l].filter);
+  document.querySelectorAll("[data-setlang]").forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-setlang") === l ? "true" : "false"); });
+  renderContact();
+  renderVoices();
+  try { localStorage.setItem("hp-lang", l); } catch(e){}
+  try { var u = new URL(location.href); u.searchParams.set("lang", l); history.replaceState(null, "", u); } catch(e){}
+}
+
+function renderContact(){
+  var a = document.getElementById("email"), tb = document.getElementById("tb");
+  if (STUDIO.email){ a.textContent = STUDIO.email; a.href = "mailto:" + STUDIO.email; tb.href = "mailto:" + STUDIO.email; }
+  else { a.textContent = UI[lang].emailPh; }
+  document.getElementById("vat").textContent = STUDIO.piva ? UI[lang].vat + " " + STUDIO.piva : "";
+}
+
+/* ---------- Speaker ---------- */
+var filter = "all";
+var audio = new Audio(); audio.preload = "none";
+var current = null; // elemento .demo attivo
+
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function langsOf(sp){ return Array.isArray(sp.lang) ? sp.lang : [sp.lang || "it"]; }
+function initials(name){ return String(name||"").split(/\s+/).filter(Boolean).map(function(w){return w[0];}).slice(0,2).join("").toUpperCase(); }
+var ICON = '<svg class="i-play" viewBox="0 0 12 12"><path d="M2 1l9 5-9 5z"/></svg><svg class="i-pause" viewBox="0 0 12 12"><path d="M2 1h3v10H2zM7 1h3v10H7z"/></svg>';
+var MIC = '<svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/></svg>';
+
+function voiceCard(sp){
+  var ls = langsOf(sp);
+  var photo = sp.photo ? '<img src="' + esc(sp.photo) + '" alt="' + esc(sp.name) + '" loading="lazy">' : '<span class="initials">' + esc(initials(sp.name)) + '</span>';
+  var demos = (sp.demos || []).map(function(d){
+    return '<li class="demo" data-src="' + esc(d.file) + '"><button type="button" class="play" aria-label="' + esc(UI[lang].play + ": " + pick(d.title)) + '">' + ICON + '</button>' +
+           '<span class="dt"><span>' + esc(pick(d.title)) + '</span><span class="bar"><i></i></span></span><span class="time">0:00</span></li>';
+  }).join("");
+  return '<article class="voice" data-lang="' + esc(ls[0]) + '"><div class="photo">' + photo +
+         '<div class="langs">' + ls.map(function(x){ return '<span class="' + esc(x) + '">' + esc(x.toUpperCase()) + '</span>'; }).join("") + '</div></div>' +
+         '<div class="voice-body"><h3>' + esc(sp.name) + '</h3>' + (sp.voice ? '<p class="desc">' + esc(pick(sp.voice)) + '</p>' : '') +
+         '<ul class="demos">' + demos + '</ul></div></article>';
+}
+function soonCard(l){
+  var row = '<li class="demo"><span class="play" aria-hidden="true">' + ICON + '</span><span class="dt"><span>Demo</span><span class="bar"><i></i></span></span><span class="time">–:––</span></li>';
+  return '<article class="voice soon" data-lang="' + l + '"><div class="photo">' + MIC + '<div class="langs"><span>' + l.toUpperCase() + '</span></div></div>' +
+         '<div class="voice-body"><h3>' + LANG_NAMES[l] + '</h3><p class="desc"><strong>' + UI[lang].soon + '.</strong> ' + UI[lang].soonTxt + '</p>' +
+         '<ul class="demos" aria-hidden="true">' + row + row + '</ul></div></article>';
+}
+function renderVoices(){
+  stopAudio();
+  var list = (window.SPEAKERS || []).filter(function(s){ return s && s.name; });
+  var order = ["it","de","en"], html = "";
+  order.forEach(function(l){
+    if (filter !== "all" && filter !== l) return;
+    var mine = list.filter(function(s){ return langsOf(s)[0] === l; });
+    // speaker multilingua: compaiono anche filtrando per la seconda lingua
+    if (filter === l) mine = list.filter(function(s){ return langsOf(s).indexOf(l) !== -1; });
+    html += mine.length ? mine.map(voiceCard).join("") : soonCard(l);
+  });
+  document.getElementById("voices").innerHTML = html;
+  document.querySelectorAll("[data-filter]").forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-filter") === filter ? "true" : "false"); });
+}
+function fmt(t){ if (!isFinite(t)) return "0:00"; t = Math.floor(t); return Math.floor(t/60) + ":" + String(t%60).padStart(2,"0"); }
+function stopAudio(){ audio.pause(); if (current){ current.classList.remove("playing"); } current = null; }
+
+document.getElementById("voices").addEventListener("click", function(e){
+  var demo = e.target.closest(".demo[data-src]"); if (!demo) return;
+  if (e.target.closest(".bar") && demo === current && audio.duration){
+    var r = demo.querySelector(".bar").getBoundingClientRect();
+    audio.currentTime = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * audio.duration; return;
+  }
+  if (!e.target.closest(".play")) return;
+  if (demo === current){ if (audio.paused){ audio.play(); demo.classList.add("playing"); } else { audio.pause(); demo.classList.remove("playing"); } return; }
+  stopAudio();
+  current = demo; audio.src = demo.getAttribute("data-src");
+  demo.classList.add("playing");
+  audio.play().catch(function(){ demo.classList.remove("playing"); });
+});
+audio.addEventListener("timeupdate", function(){
+  if (!current) return;
+  current.querySelector(".bar i").style.width = (audio.duration ? audio.currentTime / audio.duration * 100 : 0) + "%";
+  current.querySelector(".time").textContent = fmt(audio.currentTime);
+});
+audio.addEventListener("loadedmetadata", function(){ if (current) current.querySelector(".time").textContent = fmt(audio.duration); });
+audio.addEventListener("ended", function(){ if (current){ current.classList.remove("playing"); current.querySelector(".bar i").style.width = "0"; } });
+
+document.querySelectorAll("[data-filter]").forEach(function(b){ b.addEventListener("click", function(){ filter = b.getAttribute("data-filter"); renderVoices(); }); });
+document.querySelectorAll("[data-setlang]").forEach(function(b){ b.addEventListener("click", function(){ setLang(b.getAttribute("data-setlang")); }); });
+
+/* Lingua iniziale: ?lang=… → scelta salvata → lingua del browser → italiano */
+(function(){
+  var l = null;
+  try { l = new URLSearchParams(location.search).get("lang"); } catch(e){}
+  if (!l) { try { l = localStorage.getItem("hp-lang"); } catch(e){} }
+  if (!l) { var b = (navigator.language || "it").slice(0,2).toLowerCase(); l = (b === "de" || b === "en") ? b : "it"; }
+  setLang(["it","de","en"].indexOf(l) !== -1 ? l : "it");
+})();
+
+/* ---------- Waveform decorativa ---------- */
+(function(){
+  var cv = document.getElementById("wf"), ctx = cv.getContext("2d");
+  var seed = 7, rnd = function(){ return (seed = (seed * 16807) % 2147483647) / 2147483647; };
+  var N = 420, amp = [], env = 0;
+  for (var i = 0; i < N; i++){
+    var phrase = Math.sin(i / 30) * Math.sin(i / 9.1);
+    var target = phrase > -0.15 ? 0.25 + Math.abs(phrase) * 0.7 : 0.03;
+    env += (target - env) * 0.25;
+    amp.push(Math.min(1, env * (0.55 + rnd() * 0.45)));
+  }
+  function draw(){
+    var dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight, mid = h / 2;
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--wave-dim").trim();
+    var step = w / N;
+    for (var i = 0; i < N; i++){ var a = Math.max(0.5, amp[i] * (mid - 4)); ctx.fillRect(i * step, mid - a, Math.max(1, step * 0.55), a * 2); }
+  }
+  draw(); window.addEventListener("resize", draw);
+  var mq = window.matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", draw);
+})();
+</script>
+</body>
+</html>
