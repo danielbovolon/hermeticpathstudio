@@ -7,6 +7,7 @@ Contenuto della cartella
   speakers/foto  le foto degli speaker
   speakers/audio i demo audio
   fonts/         i caratteri, ospitati sul vostro server (nessuna connessione a Google)
+  logo/          il logo in SVG e PNG (4000 px, sfondo trasparente), nero e bianco
 
 
 1. PRIMA DI ANDARE ONLINE
