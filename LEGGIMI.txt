@@ -7,6 +7,8 @@ Contenuto della cartella
   speakers/foto  le foto degli speaker
   speakers/audio i demo audio
   fonts/         i caratteri, ospitati sul vostro server (nessuna connessione a Google)
+  favicon.*, apple-touch-icon.png, icon-*.png, site.webmanifest
+                 icone per la scheda del browser e per il telefono
   logo/          il logo in SVG e PNG (4000 px, sfondo trasparente), nero e bianco
 
 
