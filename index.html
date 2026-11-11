@@ -77,10 +77,11 @@ button{font:inherit;color:inherit}
 }
 
 /* Hero (sempre scuro, con video di sfondo) */
-.hero{position:relative;overflow:hidden;background:#101216;color:#e8e3d8;min-height:min(86vh,820px);display:flex;align-items:flex-end}
+.hero{position:relative;overflow:hidden;background:#101216;color:#e8e3d8;min-height:min(66vh,620px);display:flex;align-items:flex-start}
+@media (max-width:640px){.hero{min-height:0}.hero-inner{padding-bottom:110px}}
 .hero-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,18,22,.55) 0%,rgba(16,18,22,.15) 40%,rgba(16,18,22,.85) 100%),linear-gradient(90deg,rgba(16,18,22,.75) 0%,rgba(16,18,22,0) 65%)}
-.hero-inner{position:relative;width:100%;padding-block:96px 56px;display:grid;gap:26px}
+.hero-inner{position:relative;width:100%;padding-block:clamp(28px,5vh,56px) 56px;display:grid;gap:22px}
 .hero .label{color:#b6bbc2}
 .hero h1{font-size:clamp(3rem,10vw,7.5rem);font-weight:800;text-transform:uppercase;letter-spacing:-.01em}
 .hero h1 span{display:block;color:#a9aeb5;font-weight:500}
@@ -91,7 +92,7 @@ button{font:inherit;color:inherit}
 .btn.primary{background:#e2a53c;border-color:#e2a53c;color:#14171b}
 @media (prefers-reduced-motion: reduce){.hero-media{display:none}.hero{background:#101216 url(media/hero-poster.jpg) center/cover}}
 
-section{padding-block:56px;border-top:1px solid var(--line)}
+section{padding-block:48px;border-top:1px solid var(--line)}
 .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:28px;flex-wrap:wrap}
 .sec-head h2{font-size:clamp(2rem,5vw,3.2rem);text-transform:uppercase}
 .intro{max-width:65ch;margin-bottom:28px;font-size:1.1rem}
@@ -117,7 +118,7 @@ section{padding-block:56px;border-top:1px solid var(--line)}
 .strip:nth-child(4n){border-right:0}
 .strip:nth-last-child(-n+4){border-bottom:0}
 .cap{height:8px;background:var(--c)}
-.strip-top{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 0}
+.strip-top{display:flex;justify-content:flex-start;align-items:center;padding:10px 14px 0}
 .strip-top .ch{font-family:var(--f-mono);font-size:.75rem;color:var(--muted)}
 .strip-top .tag{font-family:var(--f-label);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;border:1px solid var(--c);color:var(--c);padding:1px 6px;border-radius:2px}
 .strip h3{font-size:1.45rem;text-transform:uppercase;padding:10px 14px 8px}
@@ -183,12 +184,12 @@ section{padding-block:56px;border-top:1px solid var(--line)}
 
 /* EDL (come lavoriamo) */
 .edl{border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--panel)}
-.edl-row{display:grid;grid-template-columns:70px 200px 1fr;gap:16px;padding:14px 18px;border-bottom:1px solid var(--line);align-items:baseline}
+.edl-row{display:grid;grid-template-columns:220px 1fr;gap:16px;padding:14px 18px;border-bottom:1px solid var(--line);align-items:baseline}
 .edl-row:last-child{border-bottom:0}
 .edl-row .n{font-family:var(--f-mono);font-size:.8rem;color:var(--cap-amber)}
 .edl-row .t{font-family:var(--f-display);font-weight:700;font-size:1.3rem;text-transform:uppercase;line-height:1.1}
 .edl-row p{color:var(--muted)}
-@media (max-width:700px){.edl-row{grid-template-columns:50px 1fr}.edl-row p{grid-column:2}}
+@media (max-width:700px){.edl-row{grid-template-columns:1fr;gap:4px}}
 
 /* Routing (clienti) */
 .routing{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
@@ -223,8 +224,9 @@ section{padding-block:56px;border-top:1px solid var(--line)}
 @media (max-width:560px){.talkback{grid-template-columns:1fr}.tb-btn{width:110px;height:110px}}
 
 footer{border-top:1px solid var(--line);padding-block:20px;color:var(--muted);font-size:.85rem;padding-bottom:max(20px,env(safe-area-inset-bottom,0px))}
-.brand .logo{width:30px;height:30px;flex:none}
-.foot-brand{display:inline-flex;align-items:center;gap:8px}.foot-brand .logo{width:20px;height:20px}
+.logo{display:inline-block;background:currentColor;-webkit-mask:url(logo-mark.svg) center/contain no-repeat;mask:url(logo-mark.svg) center/contain no-repeat;flex:none}
+.brand .logo{width:46px;height:42px}
+.foot-brand{display:inline-flex;align-items:center;gap:8px}.foot-brand .logo{width:26px;height:24px}
 footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 </style>
 </head>
@@ -232,7 +234,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
 <header class="transport">
   <div class="wrap">
-    <a class="brand" href="#top" aria-label="Hermetic Path Sound Studio"><svg class="logo" viewBox="0 0 100 100" aria-hidden="true"><g transform="translate(0,0) scale(1)"><circle cx="50" cy="50" r="44.5" fill="none" stroke="currentColor" stroke-width="7"/><rect x="26" y="26" width="9.5" height="48" fill="currentColor"/><rect x="64.5" y="26" width="9.5" height="48" fill="currentColor"/><path d="M31.000,50.000 L31.127,49.791 L31.253,49.581 L31.380,49.372 L31.507,49.163 L31.633,48.955 L31.760,48.747 L31.887,48.539 L32.013,48.332 L32.140,48.126 L32.267,47.921 L32.393,47.716 L32.520,47.513 L32.647,47.311 L32.773,47.110 L32.900,46.910 L33.027,46.711 L33.153,46.514 L33.280,46.319 L33.407,46.125 L33.533,45.933 L33.660,45.742 L33.787,45.554 L33.913,45.367 L34.040,45.182 L34.167,45.000 L34.293,44.820 L34.420,44.642 L34.547,44.466 L34.673,44.293 L34.800,44.122 L34.927,43.954 L35.053,43.789 L35.180,43.626 L35.307,43.466 L35.433,43.309 L35.560,43.155 L35.687,43.003 L35.813,42.855 L35.940,42.710 L36.067,42.569 L36.193,42.430 L36.320,42.295 L36.447,42.163 L36.573,42.035 L36.700,41.910 L36.827,41.789 L36.953,41.671 L37.080,41.557 L37.207,41.446 L37.333,41.340 L37.460,41.237 L37.587,41.138 L37.713,41.043 L37.840,40.952 L37.967,40.865 L38.093,40.781 L38.220,40.702 L38.347,40.627 L38.473,40.556 L38.600,40.489 L38.727,40.427 L38.853,40.368 L38.980,40.314 L39.107,40.264 L39.233,40.219 L39.360,40.177 L39.487,40.140 L39.613,40.107 L39.740,40.079 L39.867,40.055 L39.993,40.035 L40.120,40.020 L40.247,40.009 L40.373,40.002 L40.500,40.000 L40.627,40.002 L40.753,40.009 L40.880,40.020 L41.007,40.035 L41.133,40.055 L41.260,40.079 L41.387,40.107 L41.513,40.140 L41.640,40.177 L41.767,40.219 L41.893,40.264 L42.020,40.314 L42.147,40.368 L42.273,40.427 L42.400,40.489 L42.527,40.556 L42.653,40.627 L42.780,40.702 L42.907,40.781 L43.033,40.865 L43.160,40.952 L43.287,41.043 L43.413,41.138 L43.540,41.237 L43.667,41.340 L43.793,41.446 L43.920,41.557 L44.047,41.671 L44.173,41.789 L44.300,41.910 L44.427,42.035 L44.553,42.163 L44.680,42.295 L44.807,42.430 L44.933,42.569 L45.060,42.710 L45.187,42.855 L45.313,43.003 L45.440,43.155 L45.567,43.309 L45.693,43.466 L45.820,43.626 L45.947,43.789 L46.073,43.954 L46.200,44.122 L46.327,44.293 L46.453,44.466 L46.580,44.642 L46.707,44.820 L46.833,45.000 L46.960,45.182 L47.087,45.367 L47.213,45.554 L47.340,45.742 L47.467,45.933 L47.593,46.125 L47.720,46.319 L47.847,46.514 L47.973,46.711 L48.100,46.910 L48.227,47.110 L48.353,47.311 L48.480,47.513 L48.607,47.716 L48.733,47.921 L48.860,48.126 L48.987,48.332 L49.113,48.539 L49.240,48.747 L49.367,48.955 L49.493,49.163 L49.620,49.372 L49.747,49.581 L49.873,49.791 L50.000,50.000 L50.127,50.209 L50.253,50.419 L50.380,50.628 L50.507,50.837 L50.633,51.045 L50.760,51.253 L50.887,51.461 L51.013,51.668 L51.140,51.874 L51.267,52.079 L51.393,52.284 L51.520,52.487 L51.647,52.689 L51.773,52.890 L51.900,53.090 L52.027,53.289 L52.153,53.486 L52.280,53.681 L52.407,53.875 L52.533,54.067 L52.660,54.258 L52.787,54.446 L52.913,54.633 L53.040,54.818 L53.167,55.000 L53.293,55.180 L53.420,55.358 L53.547,55.534 L53.673,55.707 L53.800,55.878 L53.927,56.046 L54.053,56.211 L54.180,56.374 L54.307,56.534 L54.433,56.691 L54.560,56.845 L54.687,56.997 L54.813,57.145 L54.940,57.290 L55.067,57.431 L55.193,57.570 L55.320,57.705 L55.447,57.837 L55.573,57.965 L55.700,58.090 L55.827,58.211 L55.953,58.329 L56.080,58.443 L56.207,58.554 L56.333,58.660 L56.460,58.763 L56.587,58.862 L56.713,58.957 L56.840,59.048 L56.967,59.135 L57.093,59.219 L57.220,59.298 L57.347,59.373 L57.473,59.444 L57.600,59.511 L57.727,59.573 L57.853,59.632 L57.980,59.686 L58.107,59.736 L58.233,59.781 L58.360,59.823 L58.487,59.860 L58.613,59.893 L58.740,59.921 L58.867,59.945 L58.993,59.965 L59.120,59.980 L59.247,59.991 L59.373,59.998 L59.500,60.000 L59.627,59.998 L59.753,59.991 L59.880,59.980 L60.007,59.965 L60.133,59.945 L60.260,59.921 L60.387,59.893 L60.513,59.860 L60.640,59.823 L60.767,59.781 L60.893,59.736 L61.020,59.686 L61.147,59.632 L61.273,59.573 L61.400,59.511 L61.527,59.444 L61.653,59.373 L61.780,59.298 L61.907,59.219 L62.033,59.135 L62.160,59.048 L62.287,58.957 L62.413,58.862 L62.540,58.763 L62.667,58.660 L62.793,58.554 L62.920,58.443 L63.047,58.329 L63.173,58.211 L63.300,58.090 L63.427,57.965 L63.553,57.837 L63.680,57.705 L63.807,57.570 L63.933,57.431 L64.060,57.290 L64.187,57.145 L64.313,56.997 L64.440,56.845 L64.567,56.691 L64.693,56.534 L64.820,56.374 L64.947,56.211 L65.073,56.046 L65.200,55.878 L65.327,55.707 L65.453,55.534 L65.580,55.358 L65.707,55.180 L65.833,55.000 L65.960,54.818 L66.087,54.633 L66.213,54.446 L66.340,54.258 L66.467,54.067 L66.593,53.875 L66.720,53.681 L66.847,53.486 L66.973,53.289 L67.100,53.090 L67.227,52.890 L67.353,52.689 L67.480,52.487 L67.607,52.284 L67.733,52.079 L67.860,51.874 L67.987,51.668 L68.113,51.461 L68.240,51.253 L68.367,51.045 L68.493,50.837 L68.620,50.628 L68.747,50.419 L68.873,50.209 L69.000,50.000" fill="none" stroke="currentColor" stroke-width="7.5" stroke-linejoin="round"/></g></svg><span>Hermetic Path</span></a>
+    <a class="brand" href="#top" aria-label="Hermetic Path Sound Studio"><span class="logo" aria-hidden="true"></span><span>Hermetic Path</span></a>
     <nav id="mainnav" aria-label="Sezioni">
       <a href="#chi-siamo" data-i18n="nav.about">Chi siamo</a>
       <a href="#servizi" data-i18n="nav.services">Servizi</a>
@@ -269,7 +271,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
   <section id="chi-siamo">
     <div class="wrap">
-      <div class="sec-head"><h2 data-i18n="about.h">Chi siamo</h2><span class="label" data-i18n="about.lbl">2 tracce · registrazione armata</span></div>
+      <div class="sec-head"><h2 data-i18n="about.h">Chi siamo</h2></div>
       <p class="intro" data-i18n="about.intro">Hermetic Path nasce dall'unione dell'Atelier Neun di Aaron Giaier con il lavoro di Daniel Bovolon. Siamo due tecnici del suono formati a Berlino, con oltre vent'anni di esperienza complessiva, tornati in Alto Adige per aprire uno studio professionale al servizio delle produzioni locali e internazionali.</p>
       <div class="tracks">
         <article class="track t1">
@@ -285,7 +287,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
           </div>
         </article>
         <article class="track t2">
-          <div class="track-hdr"><div class="portrait ph"><!-- Foto di Aaron: metti img/aaron.jpg e sostituisci questo blocco con <img src="img/aaron.jpg" alt="Aaron Giaier"> --><span class="ini">AG</span><span class="label" data-i18n="ph.photo">Foto in arrivo</span></div><span class="name">Aaron<br>Giaier</span></div>
+          <div class="track-hdr"><div class="portrait"><img src="img/aaron.jpg" alt="Aaron Giaier" width="640" height="800" loading="lazy"></div><span class="name">Aaron<br>Giaier</span></div>
           <div class="track-body">
             <p class="label" data-i18n="aaron.role">Post-produzione film · ADR · Doppiaggio</p>
             <ul>
@@ -302,53 +304,53 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
   <section id="servizi">
     <div class="wrap">
-      <div class="sec-head"><h2 data-i18n="svc.h">Servizi</h2><span class="label" data-i18n="svc.lbl">Banco 1 · canali 1–8</span></div>
+      <div class="sec-head"><h2 data-i18n="svc.h">Servizi</h2></div>
       <div class="console">
         <article class="strip" style="--c:var(--cap-red)">
           <div class="cap"></div>
-          <div class="strip-top"><span class="ch">CH 01</span><span class="tag">Film</span></div>
+          <div class="strip-top"><span class="tag">Film</span></div>
           <h3 data-i18n="s1.h">Post audio film</h3>
           <p data-i18n="s1.p">Dalla A alla Z: montaggio dialoghi, sound design, Foley, premix e mix finale, con consegna di stem e M&amp;E.</p>
         </article>
         <article class="strip" style="--c:var(--cap-red)">
           <div class="cap"></div>
-          <div class="strip-top"><span class="ch">CH 02</span><span class="tag">Film</span></div>
+          <div class="strip-top"><span class="tag">Film</span></div>
           <h3 data-i18n="s2.h">ADR e doppiaggio</h3>
           <p data-i18n="s2.p">Registrazione di dialoghi in sincrono con l'immagine, gestione di take e timecode, edit pronto per il mix.</p>
         </article>
         <article class="strip" style="--c:var(--cap-blue)">
           <div class="cap"></div>
-          <div class="strip-top"><span class="ch">CH 03</span><span class="tag" data-i18n="tag.voice">Voce</span></div>
+          <div class="strip-top"><span class="tag" data-i18n="tag.voice">Voce</span></div>
           <h3 data-i18n="s3.h">Speaker IT · DE · EN</h3>
           <p data-i18n="s3.p">Voci madrelingua per spot, video istituzionali, documentari e TV. Ascolta i demo nella sezione <a href="#speaker">Speaker</a>.</p>
         </article>
         <article class="strip" style="--c:var(--cap-blue)">
           <div class="cap"></div>
-          <div class="strip-top"><span class="ch">CH 04</span><span class="tag" data-i18n="tag.voice">Voce</span></div>
+          <div class="strip-top"><span class="tag" data-i18n="tag.voice">Voce</span></div>
           <h3 data-i18n="s4.h">Voce, audiolibri e podcast</h3>
           <p data-i18n="s4.p">Sessioni in studio con fonico: registrazione voce, audiolibri e podcast, editing e consegna secondo le specifiche delle piattaforme.</p>
         </article>
         <article class="strip" style="--c:var(--cap-violet)">
           <div class="cap"></div>
-          <div class="strip-top"><span class="ch">CH 05</span><span class="tag">Sound</span></div>
+          <div class="strip-top"><span class="tag">Sound</span></div>
           <h3 data-i18n="s5.h">Sound design e Foley</h3>
           <p data-i18n="s5.p">Ambienti, effetti e Foley per film, cortometraggi, spot pubblicitari e installazioni.</p>
         </article>
         <article class="strip" style="--c:var(--cap-violet)">
           <div class="cap"></div>
-          <div class="strip-top"><span class="ch">CH 06</span><span class="tag">Broadcast</span></div>
+          <div class="strip-top"><span class="tag">Broadcast</span></div>
           <h3 data-i18n="s6.h">Restauro e mix broadcast</h3>
           <p data-i18n="s6.p">Pulizia di rumori, fruscii e click, livellamento e mix per TV, radio e web, conforme a EBU R128.</p>
         </article>
         <article class="strip" style="--c:var(--cap-green)">
           <div class="cap"></div>
-          <div class="strip-top"><span class="ch">CH 07</span><span class="tag" data-i18n="tag.music">Musica</span></div>
+          <div class="strip-top"><span class="tag" data-i18n="tag.music">Musica</span></div>
           <h3 data-i18n="s7.h">Musica originale e licenze</h3>
           <p data-i18n="s7.p">Colonne sonore e musica su misura, anche in esclusiva, oppure brani del nostro catalogo con licenza non esclusiva per TV, spot e film.</p>
         </article>
         <article class="strip" style="--c:var(--cap-green)">
           <div class="cap"></div>
-          <div class="strip-top"><span class="ch">CH 08</span><span class="tag" data-i18n="tag.music">Musica</span></div>
+          <div class="strip-top"><span class="tag" data-i18n="tag.music">Musica</span></div>
           <h3 data-i18n="s8.h">Produzione, mix e mastering</h3>
           <p data-i18n="s8.p">Registrazione voce e tuning, mix multitraccia e mastering per streaming, CD e broadcast, dall'editing al master finale.</p>
         </article>
@@ -358,7 +360,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
   <section id="speaker">
     <div class="wrap">
-      <div class="sec-head"><h2 data-i18n="vo.h">Speaker</h2><span class="label" data-i18n="vo.lbl">Banco voci · IT · DE · EN</span></div>
+      <div class="sec-head"><h2 data-i18n="vo.h">Speaker</h2></div>
       <p class="intro" data-i18n="vo.intro">Voci madrelingua italiane, tedesche e inglesi, registrate e dirette nel nostro studio. Ascolta i demo e scrivici per disponibilità e preventivo.</p>
       <div class="filters" role="group" aria-label="Filtro lingua">
         <button type="button" data-filter="all" aria-pressed="true" data-i18n="vo.all">Tutti</button>
@@ -372,28 +374,28 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
   <section id="metodo">
     <div class="wrap">
-      <div class="sec-head"><h2 data-i18n="how.h">Come lavoriamo</h2><span class="label" data-i18n="how.lbl">EDL · lista eventi</span></div>
+      <div class="sec-head"><h2 data-i18n="how.h">Come lavoriamo</h2></div>
       <div class="edl">
-        <div class="edl-row"><span class="n">001</span><span class="t" data-i18n="how.1t">Preventivo</span><p data-i18n="how.1p">Ogni progetto parte da un preventivo su misura, in base a durata, formato e consegna.</p></div>
-        <div class="edl-row"><span class="n">002</span><span class="t" data-i18n="how.2t">Sessioni in studio</span><p data-i18n="how.2p">Lo studio si prenota a ore, a mezza giornata o a giornata intera, sempre con un nostro fonico.</p></div>
-        <div class="edl-row"><span class="n">003</span><span class="t" data-i18n="how.3t">Revisioni</span><p data-i18n="how.3p">Due revisioni incluse in ogni lavoro a progetto.</p></div>
-        <div class="edl-row"><span class="n">004</span><span class="t" data-i18n="how.4t">Consegna</span><p data-i18n="how.4p">WAV 24 bit / 48 kHz, stem, M&amp;E e AAF; mix broadcast conformi a EBU R128 su richiesta.</p></div>
-        <div class="edl-row"><span class="n">005</span><span class="t" data-i18n="how.5t">Musica</span><p data-i18n="how.5p">I diritti sui brani restano allo studio; l'uso è regolato da una licenza scritta: produzione, canali, territorio, durata, esclusiva.</p></div>
+        <div class="edl-row"><span class="t" data-i18n="how.1t">Preventivo</span><p data-i18n="how.1p">Ogni progetto parte da un preventivo su misura, in base a durata, formato e consegna.</p></div>
+        <div class="edl-row"><span class="t" data-i18n="how.2t">Sessioni in studio</span><p data-i18n="how.2p">Lo studio si prenota a ore, a mezza giornata o a giornata intera, sempre con un nostro fonico.</p></div>
+        <div class="edl-row"><span class="t" data-i18n="how.3t">Revisioni</span><p data-i18n="how.3p">Due revisioni incluse in ogni lavoro a progetto.</p></div>
+        <div class="edl-row"><span class="t" data-i18n="how.4t">Consegna</span><p data-i18n="how.4p">WAV 24 bit / 48 kHz, stem, M&amp;E e AAF; mix broadcast conformi a EBU R128 su richiesta.</p></div>
+        <div class="edl-row"><span class="t" data-i18n="how.5t">Musica</span><p data-i18n="how.5p">I diritti sui brani restano allo studio; l'uso è regolato da una licenza scritta: produzione, canali, territorio, durata, esclusiva.</p></div>
       </div>
     </div>
   </section>
 
   <section id="clienti">
     <div class="wrap">
-      <div class="sec-head"><h2 data-i18n="cl.h">Per chi lavoriamo</h2><span class="label" data-i18n="cl.lbl">Routing · uscite bus</span></div>
+      <div class="sec-head"><h2 data-i18n="cl.h">Per chi lavoriamo</h2></div>
       <div class="routing">
-        <div class="bus"><span class="n">BUS 1</span><span class="t" data-i18n="cl.1">Cinema</span></div>
-        <div class="bus"><span class="n">BUS 2</span><span class="t" data-i18n="cl.2">Teatro</span></div>
-        <div class="bus"><span class="n">BUS 3</span><span class="t" data-i18n="cl.3">Pubblicità</span></div>
-        <div class="bus"><span class="n">BUS 4</span><span class="t" data-i18n="cl.4">TV e radio</span></div>
-        <div class="bus"><span class="n">BUS 5</span><span class="t" data-i18n="cl.5">Editoria audio</span></div>
-        <div class="bus"><span class="n">BUS 6</span><span class="t" data-i18n="cl.6">Musei</span></div>
-        <div class="bus"><span class="n">BUS 7</span><span class="t" data-i18n="cl.7">Musicisti</span></div>
+        <div class="bus"><span class="t" data-i18n="cl.1">Cinema</span></div>
+        <div class="bus"><span class="t" data-i18n="cl.2">Teatro</span></div>
+        <div class="bus"><span class="t" data-i18n="cl.3">Pubblicità</span></div>
+        <div class="bus"><span class="t" data-i18n="cl.4">TV e radio</span></div>
+        <div class="bus"><span class="t" data-i18n="cl.5">Editoria audio</span></div>
+        <div class="bus"><span class="t" data-i18n="cl.6">Musei</span></div>
+        <div class="bus"><span class="t" data-i18n="cl.7">Musicisti</span></div>
       </div>
       <div class="langbox">
         <div class="pills"><span>IT</span><span>DE</span><span>EN</span></div>
@@ -404,7 +406,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
   <section id="studio">
     <div class="wrap">
-      <div class="sec-head"><h2 data-i18n="st.h">Lo studio</h2><span class="label" data-i18n="st.lbl">Scheda tecnica</span></div>
+      <div class="sec-head"><h2 data-i18n="st.h">Lo studio</h2></div>
       <div class="studio">
         <div class="txt">
           <p data-i18n="st.p1">Lo studio si trova nel centro storico di Bolzano. La sala è trattata acusticamente ed è pensata per registrazione voce, ADR, sound design, mix e mastering.</p>
@@ -443,7 +445,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
 <footer>
   <div class="wrap">
-    <span class="foot-brand"><svg class="logo" viewBox="0 0 100 100" aria-hidden="true"><g transform="translate(0,0) scale(1)"><circle cx="50" cy="50" r="44.5" fill="none" stroke="currentColor" stroke-width="7"/><rect x="26" y="26" width="9.5" height="48" fill="currentColor"/><rect x="64.5" y="26" width="9.5" height="48" fill="currentColor"/><path d="M31.000,50.000 L31.127,49.791 L31.253,49.581 L31.380,49.372 L31.507,49.163 L31.633,48.955 L31.760,48.747 L31.887,48.539 L32.013,48.332 L32.140,48.126 L32.267,47.921 L32.393,47.716 L32.520,47.513 L32.647,47.311 L32.773,47.110 L32.900,46.910 L33.027,46.711 L33.153,46.514 L33.280,46.319 L33.407,46.125 L33.533,45.933 L33.660,45.742 L33.787,45.554 L33.913,45.367 L34.040,45.182 L34.167,45.000 L34.293,44.820 L34.420,44.642 L34.547,44.466 L34.673,44.293 L34.800,44.122 L34.927,43.954 L35.053,43.789 L35.180,43.626 L35.307,43.466 L35.433,43.309 L35.560,43.155 L35.687,43.003 L35.813,42.855 L35.940,42.710 L36.067,42.569 L36.193,42.430 L36.320,42.295 L36.447,42.163 L36.573,42.035 L36.700,41.910 L36.827,41.789 L36.953,41.671 L37.080,41.557 L37.207,41.446 L37.333,41.340 L37.460,41.237 L37.587,41.138 L37.713,41.043 L37.840,40.952 L37.967,40.865 L38.093,40.781 L38.220,40.702 L38.347,40.627 L38.473,40.556 L38.600,40.489 L38.727,40.427 L38.853,40.368 L38.980,40.314 L39.107,40.264 L39.233,40.219 L39.360,40.177 L39.487,40.140 L39.613,40.107 L39.740,40.079 L39.867,40.055 L39.993,40.035 L40.120,40.020 L40.247,40.009 L40.373,40.002 L40.500,40.000 L40.627,40.002 L40.753,40.009 L40.880,40.020 L41.007,40.035 L41.133,40.055 L41.260,40.079 L41.387,40.107 L41.513,40.140 L41.640,40.177 L41.767,40.219 L41.893,40.264 L42.020,40.314 L42.147,40.368 L42.273,40.427 L42.400,40.489 L42.527,40.556 L42.653,40.627 L42.780,40.702 L42.907,40.781 L43.033,40.865 L43.160,40.952 L43.287,41.043 L43.413,41.138 L43.540,41.237 L43.667,41.340 L43.793,41.446 L43.920,41.557 L44.047,41.671 L44.173,41.789 L44.300,41.910 L44.427,42.035 L44.553,42.163 L44.680,42.295 L44.807,42.430 L44.933,42.569 L45.060,42.710 L45.187,42.855 L45.313,43.003 L45.440,43.155 L45.567,43.309 L45.693,43.466 L45.820,43.626 L45.947,43.789 L46.073,43.954 L46.200,44.122 L46.327,44.293 L46.453,44.466 L46.580,44.642 L46.707,44.820 L46.833,45.000 L46.960,45.182 L47.087,45.367 L47.213,45.554 L47.340,45.742 L47.467,45.933 L47.593,46.125 L47.720,46.319 L47.847,46.514 L47.973,46.711 L48.100,46.910 L48.227,47.110 L48.353,47.311 L48.480,47.513 L48.607,47.716 L48.733,47.921 L48.860,48.126 L48.987,48.332 L49.113,48.539 L49.240,48.747 L49.367,48.955 L49.493,49.163 L49.620,49.372 L49.747,49.581 L49.873,49.791 L50.000,50.000 L50.127,50.209 L50.253,50.419 L50.380,50.628 L50.507,50.837 L50.633,51.045 L50.760,51.253 L50.887,51.461 L51.013,51.668 L51.140,51.874 L51.267,52.079 L51.393,52.284 L51.520,52.487 L51.647,52.689 L51.773,52.890 L51.900,53.090 L52.027,53.289 L52.153,53.486 L52.280,53.681 L52.407,53.875 L52.533,54.067 L52.660,54.258 L52.787,54.446 L52.913,54.633 L53.040,54.818 L53.167,55.000 L53.293,55.180 L53.420,55.358 L53.547,55.534 L53.673,55.707 L53.800,55.878 L53.927,56.046 L54.053,56.211 L54.180,56.374 L54.307,56.534 L54.433,56.691 L54.560,56.845 L54.687,56.997 L54.813,57.145 L54.940,57.290 L55.067,57.431 L55.193,57.570 L55.320,57.705 L55.447,57.837 L55.573,57.965 L55.700,58.090 L55.827,58.211 L55.953,58.329 L56.080,58.443 L56.207,58.554 L56.333,58.660 L56.460,58.763 L56.587,58.862 L56.713,58.957 L56.840,59.048 L56.967,59.135 L57.093,59.219 L57.220,59.298 L57.347,59.373 L57.473,59.444 L57.600,59.511 L57.727,59.573 L57.853,59.632 L57.980,59.686 L58.107,59.736 L58.233,59.781 L58.360,59.823 L58.487,59.860 L58.613,59.893 L58.740,59.921 L58.867,59.945 L58.993,59.965 L59.120,59.980 L59.247,59.991 L59.373,59.998 L59.500,60.000 L59.627,59.998 L59.753,59.991 L59.880,59.980 L60.007,59.965 L60.133,59.945 L60.260,59.921 L60.387,59.893 L60.513,59.860 L60.640,59.823 L60.767,59.781 L60.893,59.736 L61.020,59.686 L61.147,59.632 L61.273,59.573 L61.400,59.511 L61.527,59.444 L61.653,59.373 L61.780,59.298 L61.907,59.219 L62.033,59.135 L62.160,59.048 L62.287,58.957 L62.413,58.862 L62.540,58.763 L62.667,58.660 L62.793,58.554 L62.920,58.443 L63.047,58.329 L63.173,58.211 L63.300,58.090 L63.427,57.965 L63.553,57.837 L63.680,57.705 L63.807,57.570 L63.933,57.431 L64.060,57.290 L64.187,57.145 L64.313,56.997 L64.440,56.845 L64.567,56.691 L64.693,56.534 L64.820,56.374 L64.947,56.211 L65.073,56.046 L65.200,55.878 L65.327,55.707 L65.453,55.534 L65.580,55.358 L65.707,55.180 L65.833,55.000 L65.960,54.818 L66.087,54.633 L66.213,54.446 L66.340,54.258 L66.467,54.067 L66.593,53.875 L66.720,53.681 L66.847,53.486 L66.973,53.289 L67.100,53.090 L67.227,52.890 L67.353,52.689 L67.480,52.487 L67.607,52.284 L67.733,52.079 L67.860,51.874 L67.987,51.668 L68.113,51.461 L68.240,51.253 L68.367,51.045 L68.493,50.837 L68.620,50.628 L68.747,50.419 L68.873,50.209 L69.000,50.000" fill="none" stroke="currentColor" stroke-width="7.5" stroke-linejoin="round"/></g></svg>Hermetic Path Sound Studio · Bolzano / Bozen</span>
+    <span class="foot-brand"><span class="logo" aria-hidden="true"></span>Hermetic Path Sound Studio · Bolzano / Bozen</span>
     <span id="vat"></span>
   </div>
 </footer>
